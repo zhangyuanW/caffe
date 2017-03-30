@@ -591,8 +591,11 @@ static handler_registry handlers[] = {
 
 // Failure function to prevent Matlab from crushing
 // by throwing an exception
+// Failurefunction might be called multiple times, therefore set a first-call variable
+bool firstFail = true;
 void MyFailureFunction(){
-	if (Caffe::using_Matlab()){
+	if (Caffe::using_Matlab() && firstFail){
+		firstFail = false;
 		mexPrintf("failure function\n");
 		throw ("Fatal Error");
 		exit(1);		// this shouldn't be reached.
@@ -600,16 +603,17 @@ void MyFailureFunction(){
 }
 
 // Matlab sink, to display (abnormal) log message in matlab
+// The logsink::send might be called multiple times, therefore set a first-call variable
+// Have to use warnmsg type, otherwise matlab still crushes
+bool firstFatalLog = true;
 class MatlabSink : public google::LogSink {
 	virtual void send(google::LogSeverity severity, const char* full_filename,
 		const char* base_filename, int line,
 		const struct ::tm* tm_time,
 		const char* message, size_t message_len){
-		if (severity > google::INFO && Caffe::using_Matlab()){
-			if (severity < google::FATAL)
-				mexWarnMsgTxt(LogSink::ToString(severity, base_filename, line, tm_time, message, message_len).c_str());
-			else
-				mexErrMsgTxt(LogSink::ToString(severity, base_filename, line, tm_time, message, message_len).c_str());
+		if (severity > google::INFO && Caffe::using_Matlab() && firstFatalLog){
+			firstFatalLog = false;
+			mexWarnMsgTxt(LogSink::ToString(severity, base_filename, line, tm_time, message, message_len).c_str());
 		}
 	}
 
