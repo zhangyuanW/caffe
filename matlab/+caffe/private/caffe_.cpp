@@ -604,6 +604,7 @@ void MyFailureFunction(){
 
 // Matlab sink, to display (abnormal) log message in matlab
 // The logsink::send might be called multiple times, therefore set a first-call variable
+// You can modify it to log all the messages to matlab
 // Have to use warnmsg type, otherwise matlab still crushes
 bool firstFatalLog = true;
 class MatlabSink : public google::LogSink {
