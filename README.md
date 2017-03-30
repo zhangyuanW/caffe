@@ -1,7 +1,7 @@
 # Windows Caffe with improved MATLAB interfaces
 
 
-** This work is forked from `windows` branch of `BLVC/caffe` (see [here](https://github.com/BVLC/caffe/tree/windows)). It aims to improve stability and usability of the MATLAB interfaces for the original caffe version.**
+**This work is forked from `windows` branch of `BLVC/caffe` (see [here](https://github.com/BVLC/caffe/tree/windows)). It aims to improve stability and usability of the MATLAB interfaces for the original caffe version.**
 
 ## Major improvements:
 
