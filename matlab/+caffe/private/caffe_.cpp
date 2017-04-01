@@ -540,6 +540,15 @@ static void version(MEX_ARGS) {
   plhs[0] = mxCreateString(AS_STRING(CAFFE_VERSION));
 }
 
+// Usage: caffe_('set_logDst',logPath)
+static void set_logDst(MEX_ARGS) {
+	mxCHECK(nrhs == 1 && mxIsChar(prhs[0]),
+		"Usage: caffe_('set_logDst',logPath)");
+	// Set glog destination
+	char* logPath = mxArrayToString(prhs[0]);
+	::google::SetLogDestination(google::INFO, logPath);
+	mexPrintf("Log dest set to %s.\n", logPath);
+}
 /** -----------------------------------------------------------------
  ** Available commands.
  **/
@@ -581,6 +590,7 @@ static handler_registry handlers[] = {
   { "read_mean",          read_mean       },
   { "write_mean",         write_mean      },
   { "version",            version         },
+  { "set_logDst", set_logDst },
   // The end.
   { "END",                NULL            },
 };
